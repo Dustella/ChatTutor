@@ -35,6 +35,16 @@ importers:
       vue-router:
         specifier: ^4.6.3
         version: 4.6.3(vue@3.5.22(typescript@5.9.3))
+    devDependencies:
+      eslint-plugin-vue:
+        specifier: ^10.5.1
+        version: 10.5.1(@stylistic/eslint-plugin@5.5.0(eslint@9.39.1(jiti@2.6.1)))(@typescript-eslint/parser@8.46.3(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.39.1(jiti@2.6.1)))
+      typescript-eslint:
+        specifier: ^8.46.3
+        version: 8.46.3(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
+      vue-eslint-parser:
+        specifier: ^10.2.0
+        version: 10.2.0(eslint@9.39.1(jiti@2.6.1))
 
   packages/agent:
     dependencies:
@@ -4766,6 +4776,13 @@ packages:
 
   type-level-regexp@0.1.17:
     resolution: {integrity: sha512-wTk4DH3cxwk196uGLK/E9pE45aLfeKJacKmcEgEOA/q5dnPGNxXt0cfYdFxb57L+sEpf1oJH4Dnx/pnRcku9jg==}
+
+  typescript-eslint@8.46.3:
+    resolution: {integrity: sha512-bAfgMavTuGo+8n6/QQDVQz4tZ4f7Soqg53RbrlZQEoAltYop/XR4RAts/I0BrO3TTClTSTFJ0wYbla+P8cEWJA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+      typescript: '>=4.8.4 <6.0.0'
 
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
@@ -11053,6 +11070,17 @@ snapshots:
       tagged-tag: 1.0.0
 
   type-level-regexp@0.1.17: {}
+
+  typescript-eslint@8.46.3(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3):
+    dependencies:
+      '@typescript-eslint/eslint-plugin': 8.46.3(@typescript-eslint/parser@8.46.3(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
+      '@typescript-eslint/parser': 8.46.3(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
+      '@typescript-eslint/typescript-estree': 8.46.3(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.46.3(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
+      eslint: 9.39.1(jiti@2.6.1)
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - supports-color
 
   typescript@5.9.3: {}
 
