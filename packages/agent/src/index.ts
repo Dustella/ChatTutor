@@ -34,6 +34,7 @@ export const createAgent = (options: AgentOptions) => {
       baseURL: options.baseURL,
       messages: options.messages,
       tools,
+      maxSteps: 15,
     })
     for await (const chunk of <ReadableStream<StreamTextEvent>>fullStream) {
       if (chunk.type === 'text-delta') {
