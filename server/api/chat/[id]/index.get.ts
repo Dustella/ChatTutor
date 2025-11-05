@@ -4,9 +4,7 @@ export default defineEventHandler(async (event) => {
   const apiKey = process.env.API_KEY!
   const baseURL = process.env.BASE_URL!
   const model = process.env.MODELS!.split(',')[0]!
-  const body = await readBody<{
-    input: string
-  }>(event)
+  const { input } = getQuery(event)
   const { id } = event.context.params
   const agent = createAgent({
     apiKey,
@@ -16,9 +14,8 @@ export default defineEventHandler(async (event) => {
     pages: [],
   })
   const stream = createEventStream(event)
-  console.log(body.input)
   event.waitUntil((async () => {
-    for await (const chunk of agent(body.input)) {
+    for await (const chunk of agent(input)) {
       stream.push(JSON.stringify(chunk))
       if (chunk.type === 'text') {
         console.log(chunk.options.chunk)
@@ -29,5 +26,5 @@ export default defineEventHandler(async (event) => {
   })().then(() => {
     stream.close()
   }))
-  return stream
+  return stream.send()
 })
