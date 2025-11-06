@@ -11,7 +11,7 @@ const input = defineModel<string>('input', { required: true })
 
 <template>
   <div class="flex flex-col size-full">
-    <div class="w-full h-full flex flex-col gap-2">
+    <div class="w-full h-full flex flex-col gap-2 overflow-y-auto">
       <div
         v-for="message in messages"
         :key="message.id"

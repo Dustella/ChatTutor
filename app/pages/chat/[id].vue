@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const { messages, input, send } = useChat()
 
+const { input: initialInput } = useRoute().query as { input: string }
+input.value = initialInput
+send()
 </script>
 
 <template>

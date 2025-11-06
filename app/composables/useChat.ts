@@ -3,10 +3,13 @@ import type { Message } from '#shared/types'
 export const useChat = () => {
   const messages = ref<Message[]>([])
   const input = ref('')
+  const { params } = useRoute()
+  const id = params.id as string
   let eventSource: EventSource | null = null
 
   const send = async () => {
-    // 关闭之前的连接
+    const i = input.value
+    input.value = ''
     if (eventSource) {
       eventSource.close()
       eventSource = null
@@ -14,7 +17,7 @@ export const useChat = () => {
 
     messages.value.push({
       type: 'user',
-      content: input.value,
+      content: i,
       id: crypto.randomUUID(),
     })
     messages.value.push({
@@ -23,7 +26,7 @@ export const useChat = () => {
       id: crypto.randomUUID(),
     })
     
-    eventSource = new EventSource(`/api/chat/xxx?input=${input.value}`)
+    eventSource = new EventSource(`/api/chat/${id}?input=${i}`)
     
     eventSource.onmessage = (event) => {
       try {
@@ -51,7 +54,6 @@ export const useChat = () => {
     }
   }
 
-  // 清理函数
   const cleanup = () => {
     if (eventSource) {
       eventSource.close()
@@ -59,7 +61,6 @@ export const useChat = () => {
     }
   }
 
-  // 在组件卸载时清理
   onUnmounted(() => {
     cleanup()
   })

@@ -53,8 +53,10 @@ export default defineEventHandler(async (event) => {
     }
   })().then(async () => {
     await db.update(chat).set({
-      context: <Message[]>context,
+      context,
       status: Status.COMPLETED,
+      messages,
+      pages,
     }).where(eq(chat.id, id))
     stream.close()
   }).catch(async (_error) => {

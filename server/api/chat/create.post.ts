@@ -8,6 +8,8 @@ export default defineEventHandler(async () => {
       title: '',
       messages: [],
       context: [],
+      status: Status.PENDING,
+      pages: [],
     })
     .returning({ id: chat.id })
   return {
