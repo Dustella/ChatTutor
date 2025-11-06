@@ -7,16 +7,19 @@ const collapsed = ref(false)
 type Chat = {
   title: string
   id: string
-  date: Date
+  date: string
 }
 
-const chats: Ref<Chat[]> = ref([
-  {
-    title: 'Chat 1',
-    id: '1',
-    date: new Date(),
-  },
-])
+const chats = ref<Chat[]>([])
+
+void (async () => {
+  const c = await $fetch<{ id: string, title: string, createdAt: string, updatedAt: string, status: Status }[]>('/api/chat/history')
+  chats.value = c.map((chat) => ({
+    id: chat.id,
+    title: chat.title,
+    date: chat.createdAt,
+  }))
+})()
 </script>
 
 <template>
@@ -31,7 +34,7 @@ const chats: Ref<Chat[]> = ref([
           <FontAwesomeIcon :icon="faAdd" />
           <span v-show="collapsed">New Chat</span>
         </ButtonContainer>
-        <div v-show="collapsed" class="flex flex-col gap-5 text-gray-600">
+        <div v-show="collapsed" class="flex flex-col gap-5 text-gray-600 overflow-y-auto">
           <h2 class="text-sm font-bold select-none">
             Recent
           </h2>
@@ -39,7 +42,7 @@ const chats: Ref<Chat[]> = ref([
             <div class="flex flex-row items-center gap-5">
               <div class="flex flex-col">
                 <h3>{{ chat.title }}</h3>
-                <p>{{ chat.date.toLocaleDateString() }}</p>
+                <p>{{ chat.date }}</p>
               </div>
             </div>
           </ButtonContainer>

@@ -5,7 +5,7 @@ export default defineEventHandler(async () => {
   const [{ id }] = await db
     .insert(chat)
     .values({
-      title: '',
+      title: 'Untitled',
       messages: [],
       context: [],
       status: Status.PENDING,
