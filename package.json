@@ -20,7 +20,6 @@
     "@chat-tutor/canvas": "workspace:*",
     "@chat-tutor/mermaid": "workspace:*",
     "@chat-tutor/shared": "workspace:*",
-    "@chat-tutor/mermaid": "workspace:*",
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
     "@fortawesome/free-brands-svg-icons": "^7.0.0",
     "@fortawesome/free-regular-svg-icons": "^7.0.0",

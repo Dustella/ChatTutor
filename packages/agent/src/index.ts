@@ -26,13 +26,18 @@ export const createAgent = (options: AgentOptions) => {
     )
   }
 
+  type AdditionalInput = {
+    images?: string[]
+  }
    
-  return async function* (input: string): AsyncGenerator<FullAction> {
+  return async function* (input: string, { images }: AdditionalInput = {}): AsyncGenerator<FullAction> {
     const tools = (await Promise.all([
       getPageTools(options.pages),
       getActionTools(options.pages)
     ])).flat()
-    options.messages.push(message.user(input))
+    options.messages.push(message.user(
+      [message.textPart(input), ...(images ?? []).map(i => message.imagePart(i))]
+    ))
     const { fullStream, messages } = streamText({
       model: options.model,
       apiKey: options.apiKey,
