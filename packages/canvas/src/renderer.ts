@@ -57,7 +57,7 @@ export const createCanvasRenderer = (id: string, options: CanvasRendererOptions)
     }))
   }
 
-  const add = (action: typeof ElementAction.infer) => {
+  const add = (action: ElementAction) => {
     const element = elements.get(action.options.name)
     if (element) {
       const setup = element(processAttrs(action.options.attrs), getElement)
