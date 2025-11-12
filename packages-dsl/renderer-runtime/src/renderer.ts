@@ -1,11 +1,10 @@
-import type { Component, BaseElement, StatementPreGenerator, StatementPostGenerator, PrefabGeneratorContext, PrefabDefinition, RawContext, PrefabParseType } from "@dsl/renderer-core";
-import { createContext, createAdhoc, effect, mergeContext, toProps, reactive, getRootSpace, ref, createErrorContainer, getStatement, Attributes, Origin } from "@dsl/renderer-core"
-import type { ElementNotFoundError } from "./error"
-import { createDelegate } from "./delegate"
-import { createMarkdown } from "./builtins/markdown"
+import type { RootDocument, BaseElement, StatementPreGenerator, StatementPostGenerator, PrefabGeneratorContext, PrefabDefinition, RawContext, PrefabParseType } from '@dsl/renderer-core'
+import { createContext, createAdhoc, effect, mergeContext, toProps, reactive, getRootSpace, ref, createErrorContainer, getStatement, Attributes, Origin } from '@dsl/renderer-core'
+import { createDelegate } from './delegate'
+import { createMarkdown } from './builtins/markdown'
 import patch from 'morphdom'
-import { createParser } from "./parser"
-import { createAnimate } from "@dsl/animation"
+import { createParser } from './parser'
+import { createAnimate } from '@dsl/animation'
 
 export const toArray = <T>(value: T | T[]): T[] => Array.isArray(value) ? value : [value]
 
@@ -15,33 +14,16 @@ export function createRenderer() {
   const { parse } = createParser({ space: getRootSpace() })
   const markdown = createMarkdown()
   const indexQueue = new Map<number, (() => void)[]>()
+  const indexStatus = new Map<number, boolean>()
 
   const mountQueue: (() => void)[] = []
   const onMount = (callback: () => void) => {
     mountQueue.push(callback)
   }
-  const components: Component<string>[] = []
 
   let availableAnimations: Record<string, Animation | Animation[]> = {}
 
-  const addComponents = (...newComponents: (Component<string> | string)[]) => {
-    const names: string[] = []
-    for (const component of newComponents) {
-      if (typeof component === 'string') {
-        const parsed = parse(component)
-        console.log(parsed)
-        components.push(parsed)
-        names.push(parsed.name)
-      } else {
-        components.push(component)
-        names.push(component.name)
-      }
-    }
-    return names as [string, ...string[]]
-  }
-
   const preprocessElement = (elements: (BaseElement<string> | string)[]) => {
-    // Merge consecutive string children with newline separators
     const mergedChildren: (BaseElement<string> | string)[] = []
     let currentStringGroup: string[] = []
 
@@ -49,12 +31,10 @@ export function createRenderer() {
       if (typeof child === 'string') {
         currentStringGroup.push(child)
       } else {
-        // If we have accumulated string children, merge them
         if (currentStringGroup.length > 0) {
           mergedChildren.push(currentStringGroup.join(''))
           currentStringGroup = []
         }
-        // Process non-string child recursively
         if (typeof child === 'object' && child !== null && 'children' in child) {
           child.children = preprocessElement(child.children ?? [])
         }
@@ -62,7 +42,6 @@ export function createRenderer() {
       }
     }
 
-    // Handle any remaining string children at the end
     if (currentStringGroup.length > 0) {
       mergedChildren.push(currentStringGroup.join(''))
     }
@@ -71,20 +50,15 @@ export function createRenderer() {
   }
 
 
-  const renderComponent = (element: BaseElement<string>, parsetype: PrefabParseType = 'node'): Node | Node[] | null => {
-    const component = components.find((component) => component.name === element.name)
-    if (!component) {
-      errors.addError({ name: "Element Not Found", message: `Element ${element.name} not found`, element } satisfies ElementNotFoundError)
-      return null
-    }
-    if (!component.root) {
+  const renderRootDocument = (doc: RootDocument, parsetype: PrefabParseType = 'node'): Node | Node[] | null => {
+    if (!doc.root) {
       return document.createTextNode('')
     }
-    if (component.animations) {
-      availableAnimations = component.animations
+    if (doc.animations) {
+      availableAnimations = doc.animations
     } else availableAnimations = {}
-    const roots = preprocessElement(toArray(component.root))
-    const refs = Object.entries(component.refs ?? {})
+    const roots = preprocessElement(toArray(doc.root))
+    const refs = Object.entries(doc.refs ?? {})
     const retryWaitlist: string[] = []
     const resolve = (key: string, value: string, retrying: boolean = false) => {
       const _ref = ref()
@@ -102,7 +76,7 @@ export function createRenderer() {
         }
         if (retrying) return
         for (const key of retryWaitlist) {
-          resolve(key, component.refs![key], true)
+          resolve(key, doc.refs![key], true)
         }
       }
       update()
@@ -126,7 +100,7 @@ export function createRenderer() {
       const attrs = toProps(root.attrs, getActiveContext())
       return withContext(
         mergeContext(getActiveContext(), attrs),
-        (): Node | Node[] | null => renderElement(root!, parsetype)
+        (): Node | Node[] | null => renderElement(root!)
       )
     }) as Node[]
   }
@@ -161,7 +135,7 @@ export function createRenderer() {
         const statement = getStatement(key)
         if (!statement) {
           if (key.startsWith('#')) return null
-          errors.addError({ name: "Statement Not Found", message: `Statement ${key} not found`, element })
+          errors.addError({ name: 'Statement Not Found', message: `Statement ${key} not found`, element })
           return null
         }
         return statement(value)
@@ -217,11 +191,11 @@ export function createRenderer() {
     return node
   }
 
-  const renderElement = (element: BaseElement<string>, parsetype: PrefabParseType = 'node'): Node | Node[] | null => {
+  const renderElement = (element: BaseElement<string>): Node | Node[] | null => {
     const pfbs = getRootSpace()
     const pfb = pfbs.get(element.name)
     if (!pfb) {
-      return renderComponent(element, parsetype)
+      return null
     }
 
     element.attrs ??= {}
@@ -260,6 +234,7 @@ export function createRenderer() {
       }
     })
     indexQueue.set(index, l)
+    indexStatus.set(index, false)
     return fragment
   }
 
@@ -278,7 +253,7 @@ export function createRenderer() {
     const text = document.createElement('span')
     effect(() => {
       // We shouldn't remove newlines in some situations because it may affect markdown content.
-      const substitutionPattern = parsetype === 'node' ? /{{(.*?)}}/g : /\n*{{(.*?)}}\n*/g;
+      const substitutionPattern = parsetype === 'node' ? /{{(.*?)}}/g : /\n*{{(.*?)}}\n*/g
       const value = source.replace(substitutionPattern, (match, key) => {
         return String(_renderValue(key)).trim()
       })
@@ -297,23 +272,11 @@ export function createRenderer() {
     if (typeof element === 'string') {
       return renderText(element, parsetype)
     }
-    return renderElement(element, parsetype)
+    return renderElement(element)
   }
 
-  const renderRoot = (root: string) => {
-    const rootComp = components.find((component) => component.name === root)
-    if (!rootComp) {
-      return null
-    }
-    // Create a fake element to pass to renderComponent
-    const fakeElement: BaseElement<string> = {
-      name: rootComp.name,
-      attrs: {},
-      events: {},
-      statements: {},
-      children: []
-    }
-    return renderComponent(fakeElement)
+  const renderRoot = (root: RootDocument) => {
+    return renderRootDocument(root)
   }
 
   const mount = () => {
@@ -323,20 +286,29 @@ export function createRenderer() {
     mountQueue.length = 0
   }
 
-  const render = (rootName: string, element: HTMLElement) => {
-    (Array.from(element.children ?? [])).forEach(child => child.remove())
-    const root = renderRoot(rootName)
-    if (!root) return
-    element.append(...toArray(root))
-    mount()
+  const render = (document: string, element?: HTMLElement) => {
+    const parsed = parse(document)
+    if (!parsed) return
+    const nodes = toArray(renderRootDocument(parsed))
+    if (element) {
+      element.append(...nodes.filter(node => node !== null && node !== undefined))
+      mount()
+    }
+    return [mount, indexRender] as [
+      () => void,
+      (index: number) => void
+    ]
   }
 
   const indexRender = (index: number) => {
-    const l = indexQueue.get(index) ?? []
-    for (const callback of l) {
-      callback()
+    for (let i = 1; i <= index; i++) {
+      if (indexStatus.get(i)) continue
+      indexStatus.set(i, true)
+      const l = indexQueue.get(i) ?? []
+      for (const callback of l) {
+        callback()
+      }
     }
-    indexQueue.delete(index)
   }
 
   return {
@@ -344,12 +316,11 @@ export function createRenderer() {
     render,
     renderRoot,
     renderElement,
-    renderComponent,
+    renderRootDocument,
     renderNode,
     renderText,
     renderValue,
     indexRender,
-    addComponents,
     getActiveContext,
     setActiveContext,
     clearActiveContext,

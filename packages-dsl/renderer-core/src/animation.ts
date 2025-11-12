@@ -1,5 +1,5 @@
-import type { RawContext } from "./context";
-import type { AttributeValue } from "./element";
+import type { RawContext } from './context'
+import type { AttributeValue } from './element'
 
 export type Animation = {
   preset: string

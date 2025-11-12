@@ -1,4 +1,4 @@
-import type { RawContext } from "@dsl/renderer-core";
+import type { RawContext } from '@dsl/renderer-core'
 
 export type PrefabKnowledgeProp = {
   name: string

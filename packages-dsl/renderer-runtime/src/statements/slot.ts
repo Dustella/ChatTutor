@@ -1,4 +1,4 @@
-import { defineStatement, registerStatement } from "@dsl/renderer-core"
+import { defineStatement, registerStatement } from '@dsl/renderer-core'
 
 export const useSlot = <
   T extends Array<string>,

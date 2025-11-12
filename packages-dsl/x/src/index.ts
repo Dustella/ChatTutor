@@ -1,7 +1,7 @@
-import { parseAnimation } from "@dsl/animation";
-import type { Animation, BaseElement, Component } from "@dsl/renderer-core";
-import type { AttributeNode, BaseNode, ElementNode, ParseOptions, TextNode, ValueNode } from "@dsl/x-parser";
-import { NodeType, parse } from "@dsl/x-parser";
+import { parseAnimation } from '@dsl/animation'
+import type { Animation, BaseElement, RootDocument } from '@dsl/renderer-core'
+import type { AttributeNode, BaseNode, ElementNode, ParseOptions, TextNode, ValueNode } from '@dsl/x-parser'
+import { NodeType, parse } from '@dsl/x-parser'
 import { load } from 'js-yaml'
 
 export function parseXAttribute(attribute: AttributeNode) {
@@ -97,14 +97,15 @@ export function parseX(content: string, options: ParseOptions): (BaseElement<str
 // Match YAML frontmatter: must start at beginning of line or string
 // This prevents matching markdown table separators like |------|------|
 const COMPONENT_INFO_REG = /^---\n[\s\S]*?\n---$/gm
-export function parseComponentInfo(content: string): { name: string, props: string[], refs: Record<string, string>, animations: Record<string, Animation[] | Animation> } {
+export function parseRootDocumentInfo(content: string): {
+  refs: Record<string, string>,
+  animations: Record<string, Animation[] | Animation>
+} {
   const match = content.match(COMPONENT_INFO_REG)
   if (match) {
     const info = match[0].trim().slice(3, -3)
-    const { name, props, refs, animations } = load(info) as { name: string, props: string[], refs: Record<string, string>, animations: Record<string, string | string[]> }
+    const { refs, animations } = load(info) as { refs: Record<string, string>, animations: Record<string, string | string[]> }
     return {
-      name,
-      props,
       refs,
       animations: animations ?
         Object.fromEntries(
@@ -119,24 +120,20 @@ export function parseComponentInfo(content: string): { name: string, props: stri
         ) : {}
     }
   }
-  return { name: '', props: [], refs: {}, animations: {} }
+  return { refs: {}, animations: {} }
 }
 
-export function parseComponent(content: string, options: ParseOptions): Component<string> {
-  const component: Component<string> = {
-    name: '',
-    props: [],
+export function parseRootDocument(content: string, options: ParseOptions): RootDocument {
+  const doc: RootDocument = {
     refs: {},
   }
-  const { name, props, refs, animations } = parseComponentInfo(content)
-  component.name = name
-  component.props = props
-  component.refs = refs
+  const { animations, refs } = parseRootDocumentInfo(content)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  component.animations = animations as unknown as any
+  doc.animations = animations as unknown as any
+  doc.refs = refs
   const template = content.replace(COMPONENT_INFO_REG, '').trim()
-  component.root = parseX(template, options)
-  return component
+  doc.root = parseX(template, options)
+  return doc
 }
 
 export * from '@dsl/x-parser'

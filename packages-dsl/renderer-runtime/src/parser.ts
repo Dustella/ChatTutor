@@ -1,6 +1,6 @@
-import type { PrefabNamespace } from "@dsl/renderer-core";
-import type { ModeResolver} from "@dsl/x";
-import { parseComponent, TextMode } from "@dsl/x";
+import type { PrefabNamespace } from '@dsl/renderer-core'
+import type { ModeResolver} from '@dsl/x'
+import { parseRootDocument, TextMode } from '@dsl/x'
 
 export interface ParserOptions {
   space: PrefabNamespace
@@ -15,7 +15,7 @@ export function createParser({ space }: ParserOptions) {
     }
   
   const parse = (content: string) => {
-    return parseComponent(content, {
+    return parseRootDocument(content, {
       resolver: loadModeResolver(),
     })
   }

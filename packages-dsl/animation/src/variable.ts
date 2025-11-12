@@ -1,4 +1,4 @@
-import { defineAnimationPreset } from "@dsl/renderer-core"
+import { defineAnimationPreset } from '@dsl/renderer-core'
 
 export const variableAnimation = defineAnimationPreset<[number, number?], object>((params, { preset, context }) => {
   const from = params.length === 2 ? params[0] : (<Record<string, number>>context)[preset]

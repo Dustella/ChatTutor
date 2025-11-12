@@ -1,6 +1,6 @@
-import { calculators } from "./calculator"
-import type { Context } from "./context"
-import type { AttributeValue } from "./element"
+import { calculators } from './calculator'
+import type { Context } from './context'
+import type { AttributeValue } from './element'
 
 export function createAdhoc(context: Context) {
   return (src: string, o?: Context) => {

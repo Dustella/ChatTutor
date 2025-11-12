@@ -38,11 +38,10 @@ const container = ref<HTMLElement | null>(null)
 const errors = ref<RendererError<string>[]>([])
 
 const _render = () => {
-  console.log(template.value?.content)
-  if (!template.value?.content) return
-  const { render, getErrors, addComponents } = createRenderer()
-  const [name] = addComponents(template.value?.content!)
-  render(name, container.value!)
+  const { content } = template.value ?? {}
+  if (!content) return
+  const { render, getErrors } = createRenderer()
+  render(content, container.value!)
   nextTick(() => {
     console.log(getErrors())
     errors.value = getErrors()

@@ -1,4 +1,4 @@
-import { parseComponent } from "../src"
+import { parseRootDocument } from "../src"
 
 const content = `
 ---
@@ -18,6 +18,6 @@ World
 </component>
 `
 
-const result = parseComponent(content)
+const result = parseRootDocument(content)
 
 console.log(result)
