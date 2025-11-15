@@ -1,6 +1,7 @@
 import planeDocs from './plane.doc'
 import dotDocs from './dot.doc'
 import arrowDocs from './arrow.doc'
+import lineDocs from './line.doc'
 import labelDocs from './label.doc'
 import angleDocs from './angle.doc'
 import funcDocs from './func.doc'
@@ -11,6 +12,7 @@ export const mathPrefabDocs = [
   planeDocs,
   dotDocs,
   arrowDocs,
+  lineDocs,
   labelDocs,
   angleDocs,
   funcDocs,

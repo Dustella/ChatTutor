@@ -1,5 +1,6 @@
 import { plane } from './plane'
 import { arrow } from './arrow'
+import { line } from './line'
 import { label } from './label'
 import { angle } from './angle'
 import { func } from './func'
@@ -13,6 +14,7 @@ import { vectors } from './vectors'
 export const math = [
   plane,
   arrow,
+  line,
   label,
   angle,
   func,
