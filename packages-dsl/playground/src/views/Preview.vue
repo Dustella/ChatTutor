@@ -34,7 +34,6 @@ const tabIcon = (tab: Tab) => {
 // ------
 
 const container = ref<HTMLElement | null>(null)
-const svgContainer = ref<HTMLElement | null>(null)
 
 const errors = ref<RendererError<string>[]>([])
 
@@ -42,11 +41,7 @@ const _render = () => {
   const { content, type } = template.value ?? {}
   if (!content) return
   const { render, getErrors } = createRenderer()
-  if (type === 'html') {
-    render(content, container.value!)
-  } else {
-    render(content, svgContainer.value!)
-  }
+  render(content, container.value!)
   nextTick(() => {
     console.log(getErrors())
     errors.value = getErrors()
@@ -85,9 +80,6 @@ onMounted(() => {
         ref="container"
         class="w-full preview"
       />
-      <div class="w-full preview">
-        <svg ref="svgContainer" height="500" class="w-full"></svg>
-      </div>
     </div>
   </div>
 </template>
