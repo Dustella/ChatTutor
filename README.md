@@ -24,6 +24,10 @@
 
 ---
 
+> [!NOTE]
+>
+> Online Website: ChatTutor is available at [https://chattutor.app](https://chattutor.app), please set your own API key and models in the settings. ([https://chattutor.app/settings](https://chattutor.app/settings))
+
 ChatTutor is an AI teacher equipped with the ability to use an electronic whiteboard.
 
 Traditional chatbots interact with users primarily through text, which is sufficient in most scenarios. However, with the development of LLM in recent years, more and more people are using AI to assist their learning. In a real-world classroom, teachers have many teaching tools—chalk, computers, blackboards, and other teaching aids—that help students better understand knowledge. But for a chatbot, text can convey very limited information, especially in STEM subjects.
