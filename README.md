@@ -36,7 +36,7 @@ ChatTutor effectively solves this problem by bringing all the teaching tools use
 
 ## Features
 
-- [x] Math Canvas
+##### Math Canvas
 <table>
   <tr>
     <td>
@@ -52,8 +52,10 @@ ChatTutor effectively solves this problem by bringing all the teaching tools use
     </td>
   </tr>
 </table>
-- [ ] Code Page
-- [x] Mindmap
+
+##### Code Page (🚧 WIP)
+
+##### Mindmap
 <table>
   <tr>
     <td>
@@ -64,9 +66,12 @@ ChatTutor effectively solves this problem by bringing all the teaching tools use
     </td>
   </tr>
 </table>
-- [ ] Physics Canvas
-- [ ] Digital Logic Canvas
-- [ ] Problem Solving created by AI to user
+
+##### Physics Canvas (🚧 WIP)
+
+##### Digital Logic Canvas (🚧 WIP)
+
+##### Problem Solving created by AI to user (🚧 WIP)
 
 ## Roadmap
 Please refer to our [Roadmap v0.1](https://github.com/sheepbox8646/ChatTutor/issues/1) for the detailed roadmap
