@@ -44,20 +44,15 @@ export const plane = definePrefab<'plane', PlaneAttributes>(() => {
         container.style.justifyContent = ''
         container.style.alignItems = ''
 
+        container.style.width = '100%'
         if (contentAspectRatio > parentAspectRatio) {
           // 内容相对更宽，以宽度为基准，垂直居中
-          container.style.width = '100%'
           container.style.aspectRatio = `${width / height}`
           container.style.alignItems = 'center'
         } else {
           // 内容相对更高，以高度为基准，水平居中
           container.style.height = '100%'
-          if (attrs.flexible) {
-            container.style.width = '100%'
-            // container.style.aspectRatio = `${1 / height}`
-          } else {
-            container.style.aspectRatio = `${width / height}`
-          }
+          container.style.aspectRatio = `${width / height}`
           container.style.justifyContent = 'center'
         }
       }
