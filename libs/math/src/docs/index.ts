@@ -1,4 +1,5 @@
 import angle from './angle.doc'
+import arc from './arc.doc'
 import arrow from './arrow.doc'
 import line from './line.doc'
 import label from './label.doc'
@@ -10,6 +11,7 @@ import dot from './dot.doc'
 
 export default [
   angle,
+  arc,
   dot,
   plane,
   arrow,
