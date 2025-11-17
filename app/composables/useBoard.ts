@@ -42,9 +42,12 @@ export const useBoard = () => {
   const loadCanvasPage = (page: CanvasPage) => {
     const container = document.createElement('div')
     container.id = page.id!
-    container.style.width = '90%'
-    container.style.height = '100%'
+    container.style.width = '100%'
+    container.style.border = '1px solid grey'
+    container.style.borderRadius = '10px'
     container.style.display = 'flex'
+    container.style.justifyContent = 'center'
+    container.style.padding = '10px'
     board.value!.appendChild(container)
     const renderer = createRenderer()
     rendererMap.set(page.id!, renderer)
@@ -122,7 +125,7 @@ export const useBoard = () => {
       notes.value = p.notes
       const renderer = rendererMap.get(p.id!) as ReturnType<typeof createRenderer>
       if (renderer && renderer.mount) {
-        renderer.mount()
+        // renderer.mount()
       }
     }
   }

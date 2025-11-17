@@ -19,13 +19,21 @@ export const plane = definePrefab<'plane', PlaneAttributes>(() => {
       const { range, domain } = attrs
       const container = document.createElement('div')
       const canvas = tag('svg')
-      const width = range[1] - range[0]
-      const height = domain[1] - domain[0]
-      const aspectRatio = width / height
+      const width = domain[1] - domain[0]
+      const height = range[1] - range[0]
       canvas.attr('width', '100%')
       canvas.attr('height', '100%')
-      container.style.width = '100%'
-      container.style.aspectRatio = `${aspectRatio}`
+      if (width < height) {
+        container.style.width = '100%'
+        container.style.aspectRatio = `${width / height}`
+        container.style.justifyContent = 'center'
+      }
+      else {
+        container.style.height = '100%'
+        container.style.aspectRatio = `${height / width}`
+        container.style.alignItems = 'center'
+      }
+      container.style.display = 'flex'
 
       const root = tag('g')
       canvas.append(root.node())
@@ -87,8 +95,11 @@ export const plane = definePrefab<'plane', PlaneAttributes>(() => {
       }
 
       mount(() => {
-        const { width: w, height: h } = canvas.node().getBoundingClientRect()
-        root.attr('transform', `translate(${w * ((0 - domain[0]) / width)}, ${h * ((0 - range[0]) / height)})`)
+        const c = canvas.node()
+        const { width: w, height: h } = c.getBoundingClientRect()
+        c.setAttribute('width', `${w}`)
+        c.setAttribute('height', `${h}`)
+        root.attr('transform', `translate(${w * ((0 - domain[0]) / width)}, ${h * (range[1] / height)})`)
 
         aspectWidth.value = w / width
         aspectHeight.value = -h / height
