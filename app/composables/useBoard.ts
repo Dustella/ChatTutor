@@ -124,9 +124,6 @@ export const useBoard = () => {
     if (page.value === p.id) {
       notes.value = p.notes
       const renderer = rendererMap.get(p.id!) as ReturnType<typeof createRenderer>
-      if (renderer && renderer.mount) {
-        // renderer.mount()
-      }
     }
   }
 

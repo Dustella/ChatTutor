@@ -168,7 +168,7 @@ export function createRenderer() {
       return post(getActiveContext(), element, node)
     }
   
-    const animate = createAnimate({ node, prefab: name, context: getActiveContext(), animations: availableAnimations })
+    const animate = createAnimate({ node, prefab: name, context: getActiveContext(), animations: availableAnimations as unknown as any })
     setValue('animate', animate)
 
     delegate(node, element.events)
