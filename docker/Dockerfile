@@ -16,6 +16,17 @@ COPY packages/canvas/package.json ./packages/canvas/
 COPY packages/mermaid/package.json ./packages/mermaid/
 COPY packages/shared/package.json ./packages/shared/
 COPY packages/pkg/package.json ./packages/pkg/
+COPY packages-dsl/knowledge/package.json ./packages-dsl/knowledge/
+COPY packages-dsl/math/package.json ./packages-dsl/math/
+COPY packages-dsl/renderer-core/package.json ./packages-dsl/renderer-core/
+COPY packages-dsl/renderer-runtime/package.json ./packages-dsl/renderer-runtime/
+COPY packages-dsl/theme-default/package.json ./packages-dsl/theme-default/
+COPY packages-dsl/utils-theme/package.json ./packages-dsl/utils-theme/
+COPY packages-dsl/utils-canvas/package.json ./packages-dsl/utils-canvas/
+COPY libs/utils-canvas/package.json ./libs/utils-canvas/
+COPY libs/math/package.json ./libs/math/
+COPY libs/theme-default/package.json ./libs/theme-default/
+COPY libs/utils-theme/package.json ./libs/utils-theme/
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
@@ -64,6 +75,8 @@ COPY --from=builder --chown=nuxtjs:nodejs /app/server /app/server
 COPY --from=builder --chown=nuxtjs:nodejs /app/drizzle.config.ts /app/
 COPY --from=builder --chown=nuxtjs:nodejs /app/node_modules /app/node_modules
 COPY --from=builder --chown=nuxtjs:nodejs /app/packages /app/packages
+COPY --from=builder --chown=nuxtjs:nodejs /app/packages-dsl /app/packages-dsl
+COPY --from=builder --chown=nuxtjs:nodejs /app/libs /app/libs
 
 # Copy entrypoint script
 COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
