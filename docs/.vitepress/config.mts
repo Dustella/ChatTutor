@@ -1,7 +1,7 @@
-import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withMermaid({
   title: "ChatTutor",
   description: "Visual and Interactive AI Tutor",
   
@@ -33,7 +33,7 @@ export default defineConfig({
             {
               text: 'Blog',
               items: [
-                { text: 'Blog Home', link: '/blog/' }
+                { text: 'DevLog@2025-11-20: 关于ChatTutor，我们做了什么', link: '/blog/2025-11-20' }
               ]
             }
           ]
@@ -103,4 +103,6 @@ export default defineConfig({
       provider: 'local'
     }
   },
+
+
 })
