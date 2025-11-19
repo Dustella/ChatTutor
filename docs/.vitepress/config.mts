@@ -17,30 +17,32 @@ export default defineConfig({
           { text: 'Blog', link: '/blog' }
         ],
 
-        sidebar: [
-          {
-            text: 'Guide',
-            items: [
-              { text: 'Getting Started', link: '/getting-started' },
-              { text: 'Environment Configuration', link: '/environment' },
-              { text: 'Running with Nuxt', link: '/run-nuxt' },
-              { text: 'Running with Docker', link: '/run-docker' }
-            ]
-          },
-          {
-            text: 'Blog',
-            link: '/blog'
-          }
-        ],
+        sidebar: {
+          '/': [
+            {
+              text: 'Guide',
+              items: [
+                { text: 'Getting Started', link: '/getting-started' },
+                { text: 'Environment Configuration', link: '/environment' },
+                { text: 'Running with Nuxt', link: '/run-nuxt' },
+                { text: 'Running with Docker', link: '/run-docker' }
+              ]
+            },
+          ],
+          '/blog/': [
+            {
+              text: 'Blog',
+              items: [
+                { text: 'Blog Home', link: '/blog/' }
+              ]
+            }
+          ]
+        },
 
         socialLinks: [
           { icon: 'github', link: 'https://github.com/sheepbox8646/ChatTutor' }
         ]
-      }
-    },
-    blog: {
-      label: 'Blog',
-      link: '/blog'
+      },
     },
     zh: {
       label: '简体中文',
@@ -53,21 +55,27 @@ export default defineConfig({
           { text: '博客', link: '/blog' }
         ],
 
-        sidebar: [
-          {
-            text: '指南',
-            items: [
-              { text: '快速开始', link: '/zh/getting-started' },
-              { text: '环境变量配置', link: '/zh/environment' },
-              { text: '使用 Nuxt 运行', link: '/zh/run-nuxt' },
-              { text: '使用 Docker 运行', link: '/zh/run-docker' }
-            ]
-          },
-          {
-            text: '博客',
-            link: '/blog'
-          }
-        ],
+        sidebar: {
+          '/zh/': [
+            {
+              text: '指南',
+              items: [
+                { text: '快速开始', link: '/zh/getting-started' },
+                { text: '环境变量配置', link: '/zh/environment' },
+                { text: '使用 Nuxt 运行', link: '/zh/run-nuxt' },
+                { text: '使用 Docker 运行', link: '/zh/run-docker' }
+              ]
+            }
+          ],
+          '/blog/': [
+            {
+              text: '博客',
+              items: [
+                { text: '博客首页', link: '/blog/' }
+              ]
+            }
+          ]
+        },
 
         socialLinks: [
           { icon: 'github', link: 'https://github.com/sheepbox8646/ChatTutor' }
@@ -94,5 +102,5 @@ export default defineConfig({
     search: {
       provider: 'local'
     }
-  }
+  },
 })
