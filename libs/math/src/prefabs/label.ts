@@ -21,9 +21,11 @@ export const label = definePrefab<'label', LabelAttributes, PlaneProvides>((cont
 
       watch(() => context.aspectWidth, (value) => {
         root.setAttribute('transform', `translate(${value * attrs.x}, ${context.aspectHeight * attrs.y})`)
+        mount(mountTex)
       }, { immediate: true })
       watch(() => context.aspectHeight, (value) => {
         root.setAttribute('transform', `translate(${context.aspectWidth * attrs.x}, ${value * attrs.y})`)
+        mount(mountTex)
       }, { immediate: true })
 
       return root
